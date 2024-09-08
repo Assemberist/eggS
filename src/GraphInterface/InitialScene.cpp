@@ -14,8 +14,12 @@ InitialScene::InitialScene(int h, int w, const char* header){
 
 	btnSettings.borders = {10, 10, 100, 100};
 	btnSettings.state = BTN_IDLE;
+	btnSettings.text.setString("Settings");
+	btnSettings.text.setPosition(15, 15);
 	btnExit.borders = {120, 100, 100, 100};
 	btnExit.state = BTN_IDLE;
+	btnExit.text.setString("Exit");
+	btnExit.text.setPosition(135, 115);
 	sprGabi.sprite.setTexture(*resources[Texture_Gabi].texture);
 
 	objects.resize(3);

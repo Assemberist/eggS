@@ -14,13 +14,22 @@ enum PopUpButtonGroupState{
     POPUP_BTN_COLLAPSE_ANIMATION
 };
 
-struct PopUpButtonGroup :   public Object,
-                            public IPointAndClicable,
-                            public IPrintable,
-                            public IAnimated{
+struct PopUpButtonGroup : public Object{
     Button* buttons;
     uint8_t button_num;
     PopUpButtonGroupState state;
+
+    Button BtnCollapsed;
+    struct{
+        Button* buttons;
+        size_t num;
+    } ButtonsInGroup;
+
+    PopUpButtonGroup(){
+        flags.flagPointableAndClickable = true;
+        flags.flagAnimated = true;
+        flags.flagPrintable = true;
+    }
 
 	uint32_t on_move(sf::Event& e);
 	uint32_t on_click(sf::Event& e);
@@ -29,12 +38,6 @@ struct PopUpButtonGroup :   public Object,
     uint32_t play_animation();
 
     void print(sf::RenderWindow& win);
-
-    Button BtnCollapsed;
-    struct{
-        Button* buttons;
-        size_t num;
-    } ButtonsInGroup;
 
     ObjectType getType(){ return POPUP_BUTTON_GROUP; }
 };

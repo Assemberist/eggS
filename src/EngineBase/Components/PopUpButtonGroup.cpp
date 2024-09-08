@@ -32,8 +32,8 @@ uint32_t PopUpButtonGroup::on_release(sf::Event& e){
     }
 }
 
-uint32_t play_animation(){
-
+uint32_t PopUpButtonGroup::play_animation(){
+    return NO_EVENT;
 }
 
 void PopUpButtonGroup::print(sf::RenderWindow& win){

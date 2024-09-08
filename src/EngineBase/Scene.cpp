@@ -1,7 +1,4 @@
 #include "Scene.hpp"
-#include "Components/Button.hpp"
-#include "Components/PopUpButtonGroup.hpp"
-#include "Components/Sprite.hpp"
 #include "Object.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
@@ -46,17 +43,10 @@ void Scene::activate(){
 
         // Display scene components
         screen.clear();
-		for(auto i = objects.begin(); i != objects.end(); i++){
-			switch((*i)->getType()){
-				case SPRITE:
-					((IPrintable*)(Sprite*)(*i))->print(screen);
-				case BUTTON:
-					((IPrintable*)(Button*)(*i))->print(screen);
-				case POPUP_BUTTON_GROUP:
-					((IPrintable*)(PopUpButtonGroup*)(*i))->print(screen);
-			}
+		for(auto i = objects.begin(); i != objects.end(); i++)
+			if((*i)->isPrintable())
+					(*i)->print(screen);
 			//screen.draw(((Sprite*)*i)->sprite);
-		}
 		screen.display();
 	}
 }

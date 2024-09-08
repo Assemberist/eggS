@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include "../Object.hpp"
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Event.hpp>
 #include <cstdint>
 
@@ -13,12 +14,18 @@ enum ButtonState{
     BTN_IDLE
 };
 
-struct Button : public Object,
-                public IPointAndClicable,
-                public IPrintable{
+struct Button : public Object{
+
     sf::IntRect borders;
-    const char* text;
     ButtonState state;
+    sf::Text text;
+
+    Button(){
+        flags.flagPointableAndClickable = true;
+        flags.flagPrintable = true;
+
+        text.setString("");
+    }
 
 	uint32_t on_move(sf::Event& e);
 	uint32_t on_click(sf::Event& e);

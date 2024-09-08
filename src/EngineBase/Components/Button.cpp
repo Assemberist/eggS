@@ -52,41 +52,28 @@ uint32_t Button::hide(){
 }
 
 void Button::print(sf::RenderWindow& win){
+    sf::RectangleShape shape;
+    shape.setSize(sf::Vector2f(borders.width, borders.height));
+    shape.setPosition(borders.left, borders.top);
     switch(state){
         case BTN_IDLE:
-            {
-                sf::RectangleShape shape;
-                shape.setSize(sf::Vector2f(borders.width, borders.height));
-                shape.setPosition(borders.left, borders.top);
-                shape.setFillColor(sf::Color(100, 250, 50));
-                win.draw(shape);
-            }
+            shape.setFillColor(sf::Color(100, 250, 50));
             break;
 
         case BTN_PRESSED:
-            {
-                sf::RectangleShape shape;
-                shape.setSize(sf::Vector2f(borders.width, borders.height));
-                shape.setPosition(borders.left, borders.top);
-                shape.setFillColor(sf::Color(200, 200, 200));
-                win.draw(shape);
-            }
+            shape.setFillColor(sf::Color(200, 200, 200));
             break;
 
         //case BTN_INVISIBLE:
         //case BTN_INACTIVE:
 
         case BTN_POINTED:
-            {
-                sf::RectangleShape shape;
-                shape.setSize(sf::Vector2f(borders.width, borders.height));
-                shape.setPosition(borders.left, borders.top);
-                shape.setFillColor(sf::Color(10, 25, 250));
-                win.draw(shape);
-            }
+            shape.setFillColor(sf::Color(10, 25, 250));
             break;
 
         default:
             break;
     }
+    win.draw(shape);
+    if(!text.getString().isEmpty()) win.draw(text);
 }
