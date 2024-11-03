@@ -23,7 +23,7 @@ struct Button : public Object{
     Button(){
         flags.flagPointableAndClickable = true;
         flags.flagPrintable = true;
-
+        state = BTN_IDLE;
         text.setString("");
     }
 

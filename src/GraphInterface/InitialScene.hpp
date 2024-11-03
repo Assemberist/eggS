@@ -4,6 +4,8 @@
 
 #include "../EngineBase/Components/Sprite.hpp"
 #include "../EngineBase/Components/PopUpButtonGroup.hpp"
+#include "../EngineBase/Components/Button.hpp"
+#include "../EngineBase/Components/Label.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -44,6 +46,8 @@ protected:
 		SPR_GABI,
 		BTN_SETTINGS,
 		BTN_EXIT,
+		LABEL_SHIT,
+		POP_UP_GRP,
 		// UINT16_MAX = NO_OBJECT
 	};
 
@@ -52,6 +56,8 @@ protected:
 	Button btnSettings;
 	Button btnExit;
 	Sprite sprGabi;
+	Label lbl;
+	PopUpButtonGroup grp;
 
 	sf::Font font;
 

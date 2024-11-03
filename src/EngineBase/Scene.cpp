@@ -13,6 +13,7 @@ struct{
 void Scene::activate(){
 
     while(screen.isOpen()){
+		cycle_start();
 
         // Check input events
 		sf::Event e;
@@ -41,6 +42,14 @@ void Scene::activate(){
 			}
 		}
 
+		cycle_post_input();
+
+		for(auto i = objects.begin(); i != objects.end(); i++)
+			if((*i)->isAnimated())
+				(*i)->play_animation(screen);
+
+		cycle_preprint();
+
         // Display scene components
         screen.clear();
 		for(auto i = objects.begin(); i != objects.end(); i++)
@@ -48,6 +57,8 @@ void Scene::activate(){
 					(*i)->print(screen);
 			//screen.draw(((Sprite*)*i)->sprite);
 		screen.display();
+
+		cycle_end();
 	}
 }
 
@@ -58,3 +69,8 @@ unsigned int Scene::on_drag_n_drop(sf::Event& e){ return state; }
 unsigned int Scene::on_move(sf::Event& e){ return state; }
 unsigned int Scene::on_click(sf::Event& e){ return state; }
 unsigned int Scene::on_release(sf::Event& e){ return state; }
+
+void Scene::cycle_start(){}
+void Scene::cycle_post_input(){}
+void Scene::cycle_preprint(){}
+void Scene::cycle_end(){}

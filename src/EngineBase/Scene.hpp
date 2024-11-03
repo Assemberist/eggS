@@ -25,6 +25,11 @@ protected:
 	virtual unsigned int on_click(sf::Event& e);
 	virtual unsigned int on_release(sf::Event& e);
 
+	virtual void cycle_start();
+	virtual void cycle_post_input();
+	virtual void cycle_preprint();
+	virtual void cycle_end();
+
 public:
 	void activate();
 	virtual void resourceLoad() = 0;

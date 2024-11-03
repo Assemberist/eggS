@@ -23,7 +23,8 @@ enum ObjectEvent{
 enum ObjectType{
 	BUTTON,
 	SPRITE,
-	POPUP_BUTTON_GROUP
+	POPUP_BUTTON_GROUP,
+	LABEL
 };
 
 struct Object{
@@ -50,5 +51,5 @@ public:
 
 	// Animated
 	bool isAnimated(){ return flags.flagAnimated; }
-	virtual uint32_t play_animation(){ return NO_EVENT; };
+	virtual uint32_t play_animation(sf::RenderWindow& win){ return NO_EVENT; };
 };
