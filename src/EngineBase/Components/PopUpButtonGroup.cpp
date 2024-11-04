@@ -14,15 +14,6 @@
 
 #define HORISONTAL_PAD 10
 
-/*    POPUP_BTN_INACTIVE,
-    POPUP_BTN_INVISIBLE,
-    POPUP_BTN_POPUP_ANIMATION,
-    POPUP_BTN_COLLAPSED,
-    POPUP_BTN_NO_ENTRY_POINTED,
-    POPUP_BTN_ENTRY_POINTED,
-    POPUP_BTN_ENTRY_PRESSED,
-    POPUP_BTN_COLLAPSE_ANIMATION    */
-
 void PopUpButtonGroup::prepare2popup(){
     sf::Vector2i O = {buttons[0].borders.left + buttons[0].borders.width / 2,
                       buttons[0].borders.top  + buttons[0].borders.height / 2};
@@ -44,11 +35,6 @@ void PopUpButtonGroup::prepare2popup(){
 
     borders = {X0, Y0, Rw, Rh};
 
-    dbg(X0);
-    dbg(Y0);
-    dbg(Rw);
-    dbg(Rh);
-
     targets = new sf::IntRect[button_num];
     
     targets[1].left = X0;
@@ -65,10 +51,9 @@ void PopUpButtonGroup::prepare2collapse(){
 }
 
 uint32_t PopUpButtonGroup::on_move(sf::Event& e){
-    dbg(state);
     switch(state){
         case POPUP_BTN_COLLAPSED:
-            if(isInRect(sf::Vector2i{e.mouseMove.x, e.mouseMove.y}, borders)){
+            if(isInRect({e.mouseMove.x, e.mouseMove.y}, borders)){
                 state = POPUP_BTN_POPUP_ANIMATION;
                 flags.flagAnimated = true;
                 flags.flagPointableAndClickable = false;
@@ -76,6 +61,23 @@ uint32_t PopUpButtonGroup::on_move(sf::Event& e){
                 return ANIMATION_START;
             }
             break;
+
+        case POPUP_BTN_POPUP_ANIMATION_ENDED:
+            if(isInRect({e.mouseMove.x, e.mouseMove.y}, borders)){
+                for(int i = 1; i < button_num; i++)
+                    if(buttons[i].on_move(e) == MOUSE_ENTRY){
+                        state = POPUP_BTN_ENTRY_POINTED;
+                        pointed_btn = i;
+                        return MOUSE_ENTRY;
+                    }
+
+                state = POPUP_BTN_NO_ENTRY_POINTED;
+                return MOUSE_ENTRY;
+            }
+            else{
+                state = POPUP_BTN_COLLAPSE_ANIMATION;
+                return ANIMATION_START;
+            }
 
         case POPUP_BTN_ENTRY_POINTED:
             if(buttons[pointed_btn].on_move(e) == NO_EVENT)
@@ -91,10 +93,10 @@ uint32_t PopUpButtonGroup::on_move(sf::Event& e){
                     if(buttons[i].on_move(e) == MOUSE_ENTRY){
                         state = POPUP_BTN_ENTRY_POINTED;
                         pointed_btn = i;
-                        return MOUSE_ENTRY;
+                        break;
                     }
 
-                return NO_EVENT;
+                break;
             }
 
             state = POPUP_BTN_COLLAPSE_ANIMATION;
@@ -142,14 +144,13 @@ uint32_t PopUpButtonGroup::play_animation(sf::RenderWindow& win){
                 flags.flagAnimated = false;
                 flags.flagPointableAndClickable = true;
 
-                state = POPUP_BTN_NO_ENTRY_POINTED;
-
                 sf::Vector2i pos = sf::Mouse::getPosition(win);
-                sf::Event e;
-                e.mouseMove.x = pos.x;
-                e.mouseMove.y = pos.y;
-                
-                state = POPUP_BTN_NO_ENTRY_POINTED;
+
+                if(isInRect({pos.x, pos.y}, borders))
+                    state = POPUP_BTN_POPUP_ANIMATION_ENDED;
+                else{
+                    state = POPUP_BTN_COLLAPSE_ANIMATION;
+                }
                 break;
             }
 

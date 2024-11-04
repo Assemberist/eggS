@@ -16,7 +16,7 @@ InitialScene::InitialScene(int h, int w, const char* header){
 
 	objects.resize(5);
 
-	btnSettings.borders = {10, 10, 100, 100};
+	btnSettings.borders = {10, 10, 100, 60};
 	btnSettings.state = BTN_IDLE;
 	btnSettings.text.setFont(*resources[Font_Arial].font);
 	btnSettings.text.setFillColor(sf::Color(0,0,0));
