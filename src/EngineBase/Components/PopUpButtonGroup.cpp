@@ -47,7 +47,13 @@ void PopUpButtonGroup::prepare2popup(){
 }
 
 void PopUpButtonGroup::prepare2collapse(){
+    sf::Vector2i O = {borders.left + borders.width / 2,
+                      borders.top  + borders.height / 2};
 
+    targets = new sf::IntRect[button_num];
+
+    for(int i = 1; i < button_num; i++)
+        targets[i].left = O.x - buttons[i].borders.width;
 }
 
 uint32_t PopUpButtonGroup::on_move(sf::Event& e){
@@ -76,16 +82,21 @@ uint32_t PopUpButtonGroup::on_move(sf::Event& e){
             }
             else{
                 state = POPUP_BTN_COLLAPSE_ANIMATION;
+                flags.flagAnimated = true;
+                flags.flagPointableAndClickable = false;
+                prepare2collapse();
                 return ANIMATION_START;
             }
 
+        case POPUP_BTN_COLLAPSE_ANIMATION_ENDED:
+
+
         case POPUP_BTN_ENTRY_POINTED:
-            if(buttons[pointed_btn].on_move(e) == NO_EVENT)
-                return NO_EVENT;
-            else{
+            if(buttons[pointed_btn].on_move(e) == MOUSE_LEFT){
                 state = POPUP_BTN_NO_ENTRY_POINTED;
                 pointed_btn = 0;
             }
+            else return NO_EVENT;
 
         case POPUP_BTN_NO_ENTRY_POINTED:
             if(isInRect({e.mouseMove.x, e.mouseMove.y}, borders)){
@@ -95,7 +106,6 @@ uint32_t PopUpButtonGroup::on_move(sf::Event& e){
                         pointed_btn = i;
                         break;
                     }
-
                 break;
             }
 
@@ -128,7 +138,23 @@ uint32_t PopUpButtonGroup::on_release(sf::Event& e){
 uint32_t PopUpButtonGroup::play_animation(sf::RenderWindow& win){
     switch(state){
         case POPUP_BTN_COLLAPSE_ANIMATION: {
+            if(animation_steps == 0){
+                borders = buttons[0].borders;
 
+                delete[] targets;
+                targets = nullptr;
+
+                flags.flagAnimated = false;
+                flags.flagPointableAndClickable = true;
+
+                state = POPUP_BTN_COLLAPSED;
+                break;
+            }
+
+            for(int i = 1; i < button_num; i++)
+                buttons[i].borders.left = targets[i].left + (targets[i].left - buttons[i].borders.left) / animation_steps;
+
+            animation_steps--;
             break;
         }
 
