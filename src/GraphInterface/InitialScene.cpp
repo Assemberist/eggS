@@ -42,7 +42,6 @@ InitialScene::InitialScene(int h, int w, const char* header){
 	objects[LABEL_SHIT] = &lbl;
 
 	grp.borders = {200, 200, 100, 60};
-	grp.animation_steps = 20;
 	grp.buttons = new Button[4];
 	for(int i = 0; i < 4; i++){
 		grp.buttons[i].borders = {200, 200, 100, 60};
@@ -87,16 +86,24 @@ uint32_t InitialScene::on_click(sf::Event& e){
 uint32_t InitialScene::on_release(sf::Event& e){
 	//dragFlag = false;
 	if(pointedObject != NO_OBJECT){
-		switch(objects[pointedObject]->getType()){
-			case BUTTON:
-				switch(((Button*)objects[pointedObject])->on_release(e)){
-					case BUTTON_CLICK:
+		if(objects[pointedObject]->isPointableAndClickable()){
+			uint32_t result = objects[pointedObject]->on_release(e);
+			if(result == BUTTON_CLICK){
+				switch(objects[pointedObject]->getType()){
+					case BUTTON:
+						printf("Button #%d\n", pointedObject);
+						break;
+
+					case POPUP_BUTTON_GROUP:
+						printf("Button #%d from group\n", ((PopUpButtonGroup*)(objects[pointedObject]))->get_pointed_btn_id());
+						break;
+
 					default:
 						break;
 				}
-			default:
-				break;
-		}		
+			}
+			return result;
+		}
 	}
 	return 0;
 }

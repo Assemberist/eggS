@@ -1,0 +1,13 @@
+@startuml
+
+hide empty description
+
+[*] --> idle
+idle --> pointed : get focus
+pointed --> pressed : mouse press
+pointed --> idle : lost focus
+pressed --> idle : lost focus
+pressed --> pointed : mouse release
+    note bottom of pressed: onRelease return "button pressed" status. 
+
+@enduml

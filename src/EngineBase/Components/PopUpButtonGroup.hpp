@@ -47,6 +47,8 @@ public:
 	uint32_t on_click(sf::Event& e);
 	uint32_t on_release(sf::Event& e);
 
+    uint8_t get_pointed_btn_id();
+
     uint32_t play_animation(sf::RenderWindow& win);
 
     void print(sf::RenderWindow& win);

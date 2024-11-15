@@ -1,0 +1,37 @@
+@startuml
+
+hide empty description
+
+state WaitMove <<choice>>
+state LostFocus <<join>> : group lost focus
+
+state Collapsed
+state PopUpAnimation
+state PopUpAnimationEnded
+state CollapseAnimation
+state NoPointedButtons
+
+[*] --> Collapsed
+Collapsed --> PopUpAnimation : group got focus
+PopUpAnimation -[dashed]-> LostFocus
+PopUpAnimation --> PopUpAnimationEnded
+PopUpAnimationEnded : awaiting next onMove event
+PopUpAnimationEnded --> WaitMove : group still in focus
+PopUpAnimationEnded --> LostFocus
+LostFocus --> CollapseAnimation : group lost focus
+CollapseAnimation --> Collapsed
+WaitMove --> NoPointedButtons : an internal button in focus
+WaitMove --> ButtonPointed : no internal button in focus
+
+ButtonPointed -> NoPointedButtons : internal button lost focus &\ngroup still in focus
+NoPointedButtons -> ButtonPointed : internal button got focus
+ButtonPointed --> ButtonPressed : mouse press
+ButtonPressed --> ButtonPointed : mouse release
+    note right of ButtonPressed: onRelease return\n"button pressed"\nstatus.
+
+ButtonPointed -left-> LostFocus
+NoPointedButtons --> LostFocus
+ButtonPressed --> LostFocus
+
+
+@enduml
