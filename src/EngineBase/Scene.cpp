@@ -1,5 +1,6 @@
 #include "Scene.hpp"
 #include "Object.hpp"
+#include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -11,6 +12,7 @@ struct{
 } eventFlags;
 
 void Scene::activate(){
+	sf::Clock sysTimer;
 
     while(screen.isOpen()){
 		cycle_start();
@@ -44,19 +46,23 @@ void Scene::activate(){
 
 		cycle_post_input();
 
-		for(auto i = objects.begin(); i != objects.end(); i++)
-			if((*i)->isAnimated())
-				(*i)->play_animation(screen);
+		// Count frames
+		if(sysTimer.getElapsedTime().asMilliseconds() > 16){		
+			for(auto i = objects.begin(); i != objects.end(); i++)
+				if((*i)->isAnimated())
+					(*i)->play_animation(screen);
 
-		cycle_preprint();
+			cycle_preprint();
 
-        // Display scene components
-        screen.clear();
-		for(auto i = objects.begin(); i != objects.end(); i++)
-			if((*i)->isPrintable())
-					(*i)->print(screen);
-			//screen.draw(((Sprite*)*i)->sprite);
-		screen.display();
+			// Display scene components
+			screen.clear();
+			for(auto i = objects.begin(); i != objects.end(); i++)
+				if((*i)->isPrintable())
+						(*i)->print(screen);
+				//screen.draw(((Sprite*)*i)->sprite);
+			screen.display();
+			sysTimer.restart();
+		}
 
 		cycle_end();
 	}

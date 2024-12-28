@@ -1,6 +1,8 @@
 set(CMAKE_BUILD_TYPE Release)
 set(SFML_LIBS sfml-window sfml-graphics sfml-system)
 
+add_compile_options(-g)
+
 FILE(GLOB EngineObj src/EngineBase/*.cpp)
 FILE(GLOB EngineComponentsObj src/EngineBase/Components/*.cpp)
 add_library(Engine OBJECT ${EngineObj} ${EngineComponentsObj})

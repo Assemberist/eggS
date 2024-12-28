@@ -2,8 +2,10 @@
 
 #include "../EngineBase/Scene.hpp"
 
+#include "../EngineBase/Components/Sprite.hpp"
 #include "../EngineBase/Components/PopUpButtonGroup.hpp"
 #include "../EngineBase/Components/Button.hpp"
+#include "../EngineBase/Components/Label.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -13,8 +15,9 @@
 
 #define NO_OBJECT UINT16_MAX
 
-class InitialScene : public Scene{
+class TestScene : public Scene{
 	enum ResourceNames{
+		Texture_Gabi,
 		Font_Arial
 	};
 
@@ -38,22 +41,28 @@ protected:
 
 // Interface components
 	enum InitialSceneComponentId{
-		POP_UP_NEW_GAME,
-        POP_UP_CONTINUE,
+		//GRP_START_GAME,
+		//GRP_CHOOSE_SESSION,
+		SPR_GABI,
 		BTN_SETTINGS,
 		BTN_EXIT,
+		LABEL_SHIT,
+		POP_UP_GRP,
 		// UINT16_MAX = NO_OBJECT
 	};
 
-	PopUpButtonGroup grpStartGame;
-	PopUpButtonGroup grpChooseSession;
+	//PopUpButtonGroup grpStartGame;
+	//PopUpButtonGroup grpChooseSession;
 	Button btnSettings;
 	Button btnExit;
+	Sprite sprGabi;
+	Label lbl;
+	PopUpButtonGroup grp;
 
 	sf::Font font;
 
 public:
-	InitialScene(int h, int w, const char* header);
+	TestScene(int h, int w, const char* header);
 
 	void resourceLoad();
 	void resourceRelease();

@@ -3,8 +3,8 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <cstdint>
 
-std::vector<Object*>* SceneObjects;
-std::vector<Resource>* SceneStuff;
+static std::vector<Object*>* SceneObjects;
+static std::vector<Resource>* SceneStuff;
 
 InitialScene::InitialScene(int h, int w, const char* header){
 	sf::VideoMode mod(h, w);
@@ -14,57 +14,64 @@ InitialScene::InitialScene(int h, int w, const char* header){
 
 	resourceLoad();
 
-	objects.resize(5);
+	objects.resize(4);
 
-	btnSettings.borders = {10, 10, 100, 60};
+	grpStartGame.borders = {250, 50, 100, 60};
+	grpStartGame.buttons = new Button[4];
+	for(int i = 0; i < 4; i++){
+		grpStartGame.buttons[i].borders = {250, 50, 100, 60};
+		grpStartGame.buttons[i].text.setFont(*resources[Font_Arial].font);
+        grpStartGame.buttons[i].text.setCharacterSize(18);
+		grpStartGame.buttons[i].text.setFillColor(sf::Color(0,0,0));
+	}
+	grpStartGame.buttons[0].text.setString("New gaem");
+	grpStartGame.buttons[0].text.setPosition(265, 65);
+	grpStartGame.buttons[1].text.setString("Share PC");
+	grpStartGame.buttons[2].text.setString("Local net");
+	grpStartGame.buttons[3].text.setString("Internet");
+	grpStartGame.button_num = 4;
+	objects[POP_UP_NEW_GAME] = &grpStartGame;
+
+	grpChooseSession.borders = {250, 130, 100, 60};
+	grpChooseSession.buttons = new Button[3];
+	for(int i = 0; i < 3; i++){
+		grpChooseSession.buttons[i].borders = {250, 130, 100, 60};
+		grpChooseSession.buttons[i].text.setFont(*resources[Font_Arial].font);
+        grpChooseSession.buttons[i].text.setCharacterSize(18);
+		grpChooseSession.buttons[i].text.setFillColor(sf::Color(0,0,0));
+	}
+	grpChooseSession.buttons[0].text.setString("Continue");
+	grpChooseSession.buttons[0].text.setPosition(265, 145);
+	grpChooseSession.buttons[1].text.setString("Load game");
+	grpChooseSession.buttons[2].text.setString("Connect\nsession");
+	grpChooseSession.button_num = 3;
+	objects[POP_UP_CONTINUE] = &grpChooseSession;
+
+	btnSettings.borders = {250, 210, 100, 60};
 	btnSettings.state = BTN_IDLE;
 	btnSettings.text.setFont(*resources[Font_Arial].font);
+    btnSettings.text.setCharacterSize(18);
 	btnSettings.text.setFillColor(sf::Color(0,0,0));
 	btnSettings.text.setString("Settings");
-	btnSettings.text.setPosition(15, 15);
+	btnSettings.text.setPosition(265, 225);
 	objects[BTN_SETTINGS] = &btnSettings;
 
-	btnExit.borders = {120, 100, 100, 100};
+	btnExit.borders = {250, 290, 100, 60};
 	btnExit.state = BTN_IDLE;
 	btnExit.text.setFont(*resources[Font_Arial].font);
+    btnExit.text.setCharacterSize(18);
 	btnExit.text.setFillColor(sf::Color(0,0,0));
 	btnExit.text.setString("Exit");
-	btnExit.text.setPosition(135, 115);
+	btnExit.text.setPosition(265, 305);
 	objects[BTN_EXIT] = &btnExit;
-
-	sprGabi.sprite.setTexture(*resources[Texture_Gabi].texture);
-	objects[SPR_GABI] = &sprGabi;
-
-	lbl.text.setFont(*resources[Font_Arial].font);
-	lbl.text.setPosition({200, 15});
-	lbl.text.setString("Pidaras!!!\nPI-DA-RA-SI-NA!!!");
-	lbl.text.setFillColor({255, 0, 255});
-	objects[LABEL_SHIT] = &lbl;
-
-	grp.borders = {200, 200, 100, 60};
-	grp.buttons = new Button[4];
-	for(int i = 0; i < 4; i++){
-		grp.buttons[i].borders = {200, 200, 100, 60};
-		grp.buttons[i].text.setFont(*resources[Font_Arial].font);
-		grp.buttons[i].text.setFillColor(sf::Color(0,0,0));
-	}
-	grp.buttons[0].text.setString("Init");
-	grp.buttons[0].text.setPosition(210, 210);
-	grp.buttons[1].text.setString("One");
-	grp.buttons[2].text.setString("Two");
-	grp.buttons[3].text.setString("Three");
-	grp.button_num = 4;
-	objects[POP_UP_GRP] = &grp;
 
 	SceneObjects = &objects;
 	SceneStuff = &resources;
 }
 
 void InitialScene::resourceLoad(){
-	resources.resize(2);
-	resources[Texture_Gabi].texture = new sf::Texture();
-	resources[Texture_Gabi].texture->loadFromFile("resource/gabi.png");
-	resources[Font_Arial].font = new sf::Font();
+	resources.resize(1);
+	resources[Font_Arial].font = &font;
 	resources[Font_Arial].font->loadFromFile("resource/arial.ttf");
 }
 
